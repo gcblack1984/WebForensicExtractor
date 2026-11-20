@@ -9,6 +9,11 @@ param(
 $ErrorActionPreference = 'Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
+# Percorsi assoluti: MakeAppx non accetta percorsi relativi per il file di uscita
+if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Path $OutDir | Out-Null }
+$OutDir = (Resolve-Path $OutDir).Path
+$AppDir = (Resolve-Path $AppDir).Path
+
 $ver = $env:VERSION
 if ($ver -notmatch '^\d+\.\d+\.\d+\.0$') {
     throw "VERSION deve avere quattro numeri e terminare con .0 (esempio 4.1.0.0)."
