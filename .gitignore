@@ -1,0 +1,29 @@
+# --- Ambienti e risultati della compilazione ---
+venv/
+build/
+dist/
+build_store/
+dist_store/
+*.spec
+*.msix
+__pycache__/
+*.pyc
+
+# --- Dati creati dal programma: NON pubblicare mai ---
+# acquisizioni (contengono dati personali) e profili (cookie delle sessioni di login)
+acquisizioni/
+profili/
+preferenze.json
+impostazioni_verbale.json
+stemma.png
+stemma.jpg
+
+# --- Elementi esclusi dalla licenza EUPL (vedi AVVISI.txt) ---
+# l'emblema della Repubblica e l'icona di provenienza esterna della versione portabile
+stemma_repubblica.png
+/icon.ico
+
+# --- File di sistema ---
+Thumbs.db
+desktop.ini
+.DS_Store

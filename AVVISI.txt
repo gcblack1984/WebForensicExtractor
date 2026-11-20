@@ -1,0 +1,78 @@
+WEB FORENSIC EXTRACTOR
+Copyright (C) 2026 Giovanni Ciccarese
+
+Concesso in licenza a norma dell'EUPL
+
+Il presente software è distribuito alle condizioni della Licenza Pubblica
+dell'Unione europea (EUPL), versione 1.2 o, a scelta del licenziatario,
+versioni successive pubblicate dalla Commissione europea.
+Il testo completo è nel file LICENZA.txt (nel repository pubblico anche
+nel file LICENSE, con il testo inglese di identico valore). Il testo ufficiale in tutte le
+lingue dell'Unione è pubblicato nella Decisione di esecuzione (UE) 2017/863
+della Commissione (GU L 128 del 19.5.2017) e sul portale Interoperable
+Europe (https://interoperable-europe.ec.europa.eu/collection/eupl).
+Identificativo SPDX: EUPL-1.2
+
+Il software è fornito «così com'è», senza garanzie di alcun genere
+(articoli 7 e 8 della licenza). L'esito e il valore delle acquisizioni
+restano sotto la responsabilità di chi utilizza il programma.
+
+
+CODICE SORGENTE
+---------------
+Il codice sorgente (webacq_gui.py, verbale.py, build_windows.bat) è
+distribuito insieme al presente avviso. Chi distribuisce l'eseguibile
+deve fornire anche il codice sorgente oppure indicare un archivio in cui
+sia liberamente accessibile (articoli 3 e 5 della licenza).
+
+
+ELEMENTI ESCLUSI DALLA LICENZA
+------------------------------
+I seguenti elementi grafici NON sono concessi in licenza a norma
+dell'EUPL e restano soggetti alla disciplina loro propria:
+
+  stemma_repubblica.png  Emblema della Repubblica Italiana. Il suo uso è
+                         disciplinato dalla normativa sull'emblema dello
+                         Stato ed è riservato agli usi consentiti.
+  icon.ico               Icona di provenienza esterna: prima di una
+                         distribuzione pubblica verificarne la licenza
+                         o sostituirla con un'icona libera.
+
+Chi riutilizza il software al di fuori dell'ente di origine deve
+rimuovere o sostituire questi elementi.
+
+VERSIONE MICROSOFT STORE
+------------------------
+La versione distribuita sul Microsoft Store (cartella store\) non contiene
+gli elementi sopra elencati. La schermata di avvio (splash.png, usata da
+entrambe le versioni), l'icona e i loghi della versione Store
+(store\icon.ico, store\Assets\, store\scheda\Store_logo_*.png) sono opere
+originali concesse in licenza a norma dell'EUPL insieme al software.
+
+
+COMPONENTI DI TERZE PARTI
+-------------------------
+L'eseguibile prodotto da build_windows.bat include i seguenti componenti,
+ciascuno distribuito alle condizioni della propria licenza. I testi
+completi delle licenze sono inclusi nei rispettivi pacchetti installati
+dallo script di build.
+
+  Python                  Python Software Foundation License
+  Tcl/Tk (tkinter)        Licenza Tcl/Tk (tipo BSD)
+  Playwright per Python   Apache License 2.0
+  Chromium                BSD 3-Clause e licenze dei componenti inclusi
+  greenlet                MIT
+  pyee                    MIT
+  ttkbootstrap            MIT
+  Pillow                  MIT-CMU (HPND)
+  python-docx             MIT
+  lxml                    BSD 3-Clause
+  asn1crypto              MIT
+  ntplib                  MIT
+  PyInstaller             GPL 2.0 o successive, con eccezione che consente
+                          la distribuzione dei programmi impacchettati
+                          con qualsiasi licenza
+
+Il servizio di marca temporale FreeTSA (https://freetsa.org) è un servizio
+esterno gratuito, non incluso nel software e soggetto alle proprie
+condizioni d'uso.

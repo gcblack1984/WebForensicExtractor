@@ -1,0 +1,139 @@
+WEB FORENSIC EXTRACTOR - TESTI PER LA SCHEDA DEL MICROSOFT STORE
+Lingua della scheda: italiano (it-IT)
+Copiare ogni sezione nel campo corrispondente di Partner Center.
+Le parti tra [parentesi quadre] vanno completate.
+
+==============================================================================
+NOME DEL PRODOTTO (da riservare in Partner Center)
+==============================================================================
+Web Forensic Extractor
+
+==============================================================================
+DESCRIZIONE BREVE
+==============================================================================
+Acquisisci pagine web e post dei social network in modo forense: screenshot,
+codice della pagina, traffico di rete e video della sessione, chiusi in un
+pacchetto con impronte SHA-256 e marca temporale, più il verbale in Word.
+
+==============================================================================
+DESCRIZIONE
+==============================================================================
+Web Forensic Extractor trasforma ciò che vedi nel browser in un insieme di file
+che puoi produrre come prova, con tutto il necessario per dimostrarne
+l'integrità e la data di acquisizione.
+
+Apri la pagina da documentare, espandi commenti e risposte e premi «Acquisisci
+stato». Per ogni stato il programma salva lo screenshot della parte visibile e
+dell'intera pagina, il codice HTML, l'archivio MHTML e il testo. Per tutta la
+sessione registra il traffico di rete e un video della navigazione. Alla
+chiusura calcola le impronte SHA-256 e MD5 di ogni file, crea un pacchetto ZIP
+e richiede una marca temporale RFC 3161.
+
+Puoi acquisire pagine pubbliche con un browser pulito, senza cookie né
+sessioni, oppure contenuti visibili solo agli utenti registrati: il login si
+fa in una fase separata e non registrata, così le credenziali non finiscono
+nelle evidenze. Per Facebook, Instagram, X, LinkedIn, TikTok, YouTube e Reddit
+il programma può aprire automaticamente commenti e risposte, senza mai
+cliccare pulsanti come Rispondi, Mi piace o Condividi.
+
+A fine acquisizione il programma compila un verbale delle operazioni in
+formato Word, con la cronologia delle attività, gli strumenti utilizzati, le
+impronte e l'elenco dei file, pronto da completare e sottoscrivere.
+L'archivio dei casi permette di cercare le acquisizioni svolte e di
+verificarne l'integrità in qualsiasi momento.
+
+Tutti i dati restano sul tuo computer: il programma non contiene telemetria
+e non invia nulla all'autore. Software libero, distribuito con la Licenza
+Pubblica dell'Unione europea (EUPL) v. 1.2.
+
+Il valore probatorio di un'acquisizione dipende dalla procedura seguita ed è
+valutato dall'autorità giudiziaria: il programma documenta la procedura, non
+sostituisce la valutazione di un professionista.
+
+==============================================================================
+FUNZIONALITÀ DEL PRODOTTO (una per riga, massimo 20)
+==============================================================================
+Acquisizione di pagine pubbliche con browser pulito, senza cookie
+Acquisizione con login, con sessioni separate per piattaforma
+Screenshot visibile e a pagina intera, HTML, MHTML e testo
+Registrazione del traffico di rete (HAR) e video della sessione
+Impronte SHA-256 e MD5 di ogni file e del pacchetto finale
+Marca temporale RFC 3161 sul pacchetto
+Espansione automatica di commenti e risposte sui principali social
+Verbale delle operazioni in Word, precompilato
+Archivio dei casi con ricerca e verifica dell'integrità
+Scarto non distruttivo delle acquisizioni, con motivo annotato
+Temi chiaro e scuro
+Nessuna telemetria: tutti i dati restano sul computer
+
+==============================================================================
+TERMINI DI RICERCA (massimo 7)
+==============================================================================
+acquisizione forense
+copia forense web
+screenshot certificato
+prova digitale
+social network
+hash SHA-256
+verbale
+
+==============================================================================
+NOVITÀ DI QUESTA VERSIONE
+==============================================================================
+Prima versione disponibile sul Microsoft Store.
+
+==============================================================================
+COPYRIGHT E MARCHI
+==============================================================================
+© 2026 Giovanni Ciccarese. Software libero concesso in licenza a norma
+dell'EUPL v. 1.2.
+
+==============================================================================
+CONDIZIONI DI LICENZA AGGIUNTIVE
+==============================================================================
+Distribuito con la Licenza Pubblica dell'Unione europea (EUPL) v. 1.2:
+https://interoperable-europe.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+Il codice sorgente è incluso nella cartella "sorgenti" del programma.
+
+==============================================================================
+ALTRI CAMPI
+==============================================================================
+Categoria:           Utilità e strumenti
+Prezzo:              Gratuito
+Mercati:             [Italia oppure tutti i mercati]
+Privacy policy:      https://gcblack1984.github.io/WebForensicExtractor/privacy.html
+Sito web:            [facoltativo]
+Contatto supporto:   giovanni.ciccarese84@gmail.com
+Requisiti di sistema: Windows 10 versione 1809 o successiva, 64 bit;
+                     connessione a internet; circa 1 GB di spazio libero.
+
+==============================================================================
+CLASSIFICAZIONE PER ETÀ (questionario IARC) - indicazioni
+==============================================================================
+Tipo di prodotto: app (non gioco), categoria Utilità.
+Il prodotto consente di navigare su internet senza restrizioni: rispondere SÌ
+alla domanda sull'accesso illimitato a internet.
+Nessun contenuto violento, sessuale, linguaggio volgare, gioco d'azzardo,
+acquisti in app o condivisione della posizione da parte del programma.
+Non consente agli utenti di comunicare tra loro tramite il programma.
+
+==============================================================================
+NOTE PER LA CERTIFICAZIONE (campo "Note per la certificazione")
+==============================================================================
+Desktop application (Win32, packaged with MSIX / Desktop Bridge) for the
+forensic capture of web pages. The runFullTrust capability is required
+because the app launches a bundled Chromium browser through Playwright.
+The bundled browser engine is Chromium (Store policy 10.2.1).
+
+How to test (no account needed):
+1. Start the app and wait for the splash screen to close.
+2. Keep "Pagina pubblica (senza login)" selected.
+3. Fill "Caso (ID)" with TEST-1, "Operatore" with Tester and
+   "URL da acquisire" with https://example.com
+4. Click "Avvia acquisizione": a Chromium window opens on the page.
+5. Click "Acquisisci stato", then "Termina e sigilla" and confirm.
+6. The results are saved in Documents\Web Forensic Extractor\Acquisizioni.
+
+The app has no telemetry and sends no data to the publisher. It connects only
+to the sites entered by the user and to api.ipify.org, pool.ntp.org and
+freetsa.org (see the privacy policy).
