@@ -37,6 +37,16 @@ New-Item -ItemType Directory -Path $layout | Out-Null
 Copy-Item -Path (Join-Path $AppDir '*') -Destination $layout -Recurse
 Copy-Item -Path (Join-Path $here 'Assets') -Destination $layout -Recurse
 
+# Un pacchetto MSIX non puo' contenere file chiamati "[Content_Types].xml" (nome riservato del
+# formato). python-docx include la cartella sorgente del proprio modello, che ne contiene uno e
+# non serve in esecuzione (il programma usa default.docx): la si toglie dal pacchetto.
+Get-ChildItem -LiteralPath $layout -Recurse -Directory |
+    Where-Object { $_.Name -eq 'default-docx-template' } |
+    ForEach-Object { Write-Host "Escluso dal pacchetto: $($_.FullName)"; Remove-Item -LiteralPath $_.FullName -Recurse -Force }
+Get-ChildItem -LiteralPath $layout -Recurse -File |
+    Where-Object { $_.Name -eq '[Content_Types].xml' } |
+    ForEach-Object { Write-Host "Escluso dal pacchetto: $($_.FullName)"; Remove-Item -LiteralPath $_.FullName -Force }
+
 function Esc([string]$s) { return [System.Security.SecurityElement]::Escape($s) }
 $xml = Get-Content -Path (Join-Path $here 'AppxManifest.template.xml') -Raw -Encoding UTF8
 $xml = $xml.Replace('{{IDENTITY_NAME}}', (Esc $env:IDENTITY_NAME))
