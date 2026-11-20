@@ -32,7 +32,8 @@ pip install playwright ntplib asn1crypto python-docx ttkbootstrap==1.10.1 pyinst
 
 REM Installa Chromium DENTRO il pacchetto playwright, cosi' PyInstaller lo include
 set PLAYWRIGHT_BROWSERS_PATH=0
-python -m playwright install chromium || goto :err
+REM --no-shell: non scarica la seconda copia "headless" di Chromium, che il programma non usa
+python -m playwright install chromium --no-shell || goto :err
 
 pyinstaller --noconfirm --clean --onedir --windowed ^
   --name WebForensicExtractor ^

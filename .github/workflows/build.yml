@@ -66,7 +66,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install playwright ntplib asn1crypto python-docx ttkbootstrap==1.10.1 pyinstaller
-          python -m playwright install chromium
+          python -m playwright install chromium --no-shell
 
       - name: Compila la versione Store
         run: |
