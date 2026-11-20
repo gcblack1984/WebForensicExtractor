@@ -4,10 +4,12 @@
 #
 # Quando parte:
 #  - a ogni modifica del programma o degli script di compilazione sul ramo main;
-#  - a mano, da Actions > Compilazione > Run workflow;
-#  - alla creazione di un tag vX.Y.Z: in quel caso pubblica anche una release
-#    con la versione portabile (il pacchetto MSIX non è firmato e va caricato
-#    in Partner Center, non distribuito agli utenti).
+#  - a mano, da Actions > Compilazione > Run workflow; spuntando
+#    "Pubblica la release" viene creata anche la release vX.Y.Z (con il tag)
+#    con la versione portabile;
+#  - alla creazione di un tag vX.Y.Z, con la stessa release.
+#  Il pacchetto MSIX non è firmato: va caricato in Partner Center e non viene
+#  allegato alla release.
 #
 # I dati di identità dello Store e la versione sono letti da build_store.bat,
 # così restano in un unico punto.
@@ -26,6 +28,11 @@ on:
       - ".github/workflows/build.yml"
     tags: ["v*"]
   workflow_dispatch:
+    inputs:
+      pubblica_release:
+        description: "Pubblica la release (versione letta da build_store.bat)"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -38,6 +45,8 @@ jobs:
   build:
     runs-on: windows-latest
     timeout-minutes: 60
+    outputs:
+      short_version: ${{ steps.prep.outputs.short_version }}
     env:
       PLAYWRIGHT_BROWSERS_PATH: "0"   # Chromium dentro il pacchetto playwright, incluso da PyInstaller
     defaults:
@@ -108,6 +117,7 @@ jobs:
         run: ./store/crea_msix.ps1 -AppDir dist_store\WebForensicExtractor -OutDir dist_store
 
       - name: Prepara i file da scaricare
+        id: prep
         run: |
           New-Item -ItemType Directory -Force -Path output | Out-Null
           $short = $env:VERSION -replace '\.0$', ''
@@ -119,6 +129,7 @@ jobs:
           $lines | Out-File output\SHA256SUMS.txt -Encoding utf8
           Get-Content output\SHA256SUMS.txt
           "SHORT_VERSION=$short" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "short_version=$short" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
 
       - name: Carica il pacchetto MSIX
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -140,7 +151,7 @@ jobs:
 
   release:
     needs: build
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.pubblica_release)
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -154,8 +165,11 @@ jobs:
       - name: Pubblica la release
         env:
           GH_TOKEN: ${{ github.token }}
+          SHORT_VERSION: ${{ needs.build.outputs.short_version }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" output/* \
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then TAG="${GITHUB_REF_NAME}"; else TAG="v${SHORT_VERSION}"; fi
+          gh release create "${TAG}" output/* \
             --repo "${GITHUB_REPOSITORY}" \
-            --title "Web Forensic Extractor ${GITHUB_REF_NAME#v}" \
+            --target "${GITHUB_SHA}" \
+            --title "Web Forensic Extractor ${TAG#v}" \
             --notes "Versione portabile per Windows 10 e 11 a 64 bit: estrarre l'archivio e avviare WebForensicExtractor.exe. Le impronte SHA-256 sono nel file SHA256SUMS.txt. Novità: vedi CHANGELOG.md. Licenza EUPL 1.2; codice sorgente incluso nella cartella sorgenti dell'archivio."
