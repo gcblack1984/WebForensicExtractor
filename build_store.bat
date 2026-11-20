@@ -9,9 +9,9 @@ REM ============================================================================
 REM  PRIMA DI ESEGUIRE: copiare qui sotto i valori indicati in Partner Center,
 REM  pagina dell'app > Gestione prodotto > Identita' del prodotto.
 REM ----------------------------------------------------------------------------
-set "IDENTITY_NAME=INSERIRE_Package/Identity/Name"
-set "PUBLISHER=INSERIRE_Package/Identity/Publisher"
-set "PUBLISHER_DISPLAY_NAME=INSERIRE_Package/Properties/PublisherDisplayName"
+set "IDENTITY_NAME=CICCARESEGiovanni.WebForensicExtractor"
+set "PUBLISHER=CN=E9C25802-DEC0-43B0-BFF6-582461D661F8"
+set "PUBLISHER_DISPLAY_NAME=CICCARESE Giovanni"
 set "DISPLAY_NAME=Web Forensic Extractor"
 set "VERSION=4.2.0.0"
 REM ----------------------------------------------------------------------------

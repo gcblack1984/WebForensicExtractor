@@ -60,6 +60,15 @@ repository (vedi [AVVISI.txt](AVVISI.txt)): in loro assenza la compilazione usa 
 `store\icon.ico` e il verbale non propone lo stemma predefinito. Logo o stemma si possono comunque
 inserire nel verbale con «Scegli immagine…».
 
+### Compilazione automatica su GitHub
+
+Il workflow [`.github/workflows/build.yml`](.github/workflows/build.yml) compila tutto sui server di
+GitHub, senza bisogno di Python sul proprio computer: crea il pacchetto MSIX per il Microsoft Store
+e la versione portabile, con le impronte SHA-256. Parte da solo a ogni modifica del programma, oppure
+a mano da **Actions → Compilazione → Run workflow**; i file si scaricano dalla sezione **Artifacts**
+dell'esecuzione. Creando un tag `vX.Y.Z` viene pubblicata anche una release con la versione portabile.
+Identità dello Store e numero di versione sono letti da `build_store.bat`.
+
 ## Struttura del repository
 
 ```
@@ -70,6 +79,7 @@ build_windows.bat      compilazione della versione portabile
 build_store.bat        compilazione del pacchetto per il Microsoft Store
 prova_store.bat        prova locale del pacchetto Store
 store/                 manifest MSIX, loghi, icona e testi per lo Store
+.github/workflows/      compilazione automatica su GitHub
 docs/                  guide, verbale di esempio, informativa sulla privacy
 LICENSE                licenza EUPL 1.2 (testo inglese)
 LICENZA.txt            licenza EUPL 1.2 (testo italiano)

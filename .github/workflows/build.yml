@@ -1,0 +1,161 @@
+# Web Forensic Extractor - compilazione automatica
+# Crea il pacchetto MSIX per il Microsoft Store e la versione portabile.
+# SPDX-License-Identifier: EUPL-1.2
+#
+# Quando parte:
+#  - a ogni modifica del programma o degli script di compilazione sul ramo main;
+#  - a mano, da Actions > Compilazione > Run workflow;
+#  - alla creazione di un tag vX.Y.Z: in quel caso pubblica anche una release
+#    con la versione portabile (il pacchetto MSIX non è firmato e va caricato
+#    in Partner Center, non distribuito agli utenti).
+#
+# I dati di identità dello Store e la versione sono letti da build_store.bat,
+# così restano in un unico punto.
+
+name: Compilazione
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "webacq_gui.py"
+      - "verbale.py"
+      - "splash.png"
+      - "build_store.bat"
+      - "store/**"
+      - ".github/workflows/build.yml"
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: compilazione-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: "0"   # Chromium dentro il pacchetto playwright, incluso da PyInstaller
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Scarica il codice
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Installa Python 3.12 (64 bit)
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+          architecture: x64
+
+      - name: Leggi identità e versione da build_store.bat
+        run: |
+          $bat = Get-Content build_store.bat -Raw
+          foreach ($k in 'IDENTITY_NAME','PUBLISHER','PUBLISHER_DISPLAY_NAME','DISPLAY_NAME','VERSION') {
+            $m = [regex]::Match($bat, "set `"$k=([^`"]*)`"")
+            if (-not $m.Success -or $m.Groups[1].Value -like 'INSERIRE*') { throw "Valore mancante in build_store.bat: $k" }
+            "$k=$($m.Groups[1].Value)" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          }
+
+      - name: Installa le librerie
+        run: |
+          python -m pip install --upgrade pip
+          pip install playwright ntplib asn1crypto python-docx ttkbootstrap==1.10.1 pyinstaller
+          python -m playwright install chromium
+
+      - name: Compila la versione Store
+        run: |
+          pyinstaller --noconfirm --clean --onedir --windowed `
+            --name WebForensicExtractor `
+            --distpath dist_store --workpath build_store `
+            --icon store\icon.ico `
+            --add-data "store\splash.png;." `
+            --add-data "store\icon.ico;." `
+            --collect-all playwright --collect-all asn1crypto --collect-all docx `
+            --collect-all ttkbootstrap `
+            webacq_gui.py
+
+      - name: Compila la versione portabile
+        run: |
+          pyinstaller --noconfirm --clean --onedir --windowed `
+            --name WebForensicExtractor `
+            --distpath dist --workpath build `
+            --icon store\icon.ico `
+            --add-data "splash.png;." `
+            --add-data "store\icon.ico;." `
+            --collect-all playwright --collect-all asn1crypto --collect-all docx `
+            --collect-all ttkbootstrap `
+            webacq_gui.py
+
+      - name: Aggiungi licenza, avvisi e codice sorgente (artt. 3 e 5 EUPL)
+        run: |
+          foreach ($app in 'dist_store\WebForensicExtractor', 'dist\WebForensicExtractor') {
+            foreach ($f in 'LICENSE','LICENZA.txt','AVVISI.txt') { if (Test-Path $f) { Copy-Item $f $app } }
+            $src = Join-Path $app 'sorgenti'
+            New-Item -ItemType Directory -Force -Path $src | Out-Null
+            foreach ($f in 'webacq_gui.py','verbale.py','splash.png','build_windows.bat','build_store.bat','prova_store.bat','LICENSE','LICENZA.txt','AVVISI.txt','README.md','CHANGELOG.md') {
+              if (Test-Path $f) { Copy-Item $f $src }
+            }
+            Copy-Item store (Join-Path $src 'store') -Recurse -Force
+          }
+
+      - name: Crea il pacchetto MSIX
+        run: ./store/crea_msix.ps1 -AppDir dist_store\WebForensicExtractor -OutDir dist_store
+
+      - name: Prepara i file da scaricare
+        run: |
+          New-Item -ItemType Directory -Force -Path output | Out-Null
+          $short = $env:VERSION -replace '\.0$', ''
+          Move-Item "dist_store\WebForensicExtractor_$($env:VERSION)_x64.msix" output\
+          Compress-Archive -Path dist\WebForensicExtractor -DestinationPath "output\WebForensicExtractor_$($short)_portabile.zip"
+          $exe = (Get-FileHash dist\WebForensicExtractor\WebForensicExtractor.exe -Algorithm SHA256).Hash.ToLower()
+          $lines = Get-ChildItem output -File | ForEach-Object { "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower())  $($_.Name)" }
+          $lines += "$exe  WebForensicExtractor.exe (versione portabile)"
+          $lines | Out-File output\SHA256SUMS.txt -Encoding utf8
+          Get-Content output\SHA256SUMS.txt
+          "SHORT_VERSION=$short" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: Carica il pacchetto MSIX
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: WebForensicExtractor-${{ env.VERSION }}-msix
+          path: |
+            output/*.msix
+            output/SHA256SUMS.txt
+          retention-days: 30
+
+      - name: Carica la versione portabile
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: WebForensicExtractor-${{ env.SHORT_VERSION }}-portabile
+          path: |
+            output/*_portabile.zip
+            output/SHA256SUMS.txt
+          retention-days: 30
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Scarica la versione portabile
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: "*-portabile"
+          merge-multiple: true
+          path: output
+      - name: Pubblica la release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" output/* \
+            --repo "${GITHUB_REPOSITORY}" \
+            --title "Web Forensic Extractor ${GITHUB_REF_NAME#v}" \
+            --notes "Versione portabile per Windows 10 e 11 a 64 bit: estrarre l'archivio e avviare WebForensicExtractor.exe. Le impronte SHA-256 sono nel file SHA256SUMS.txt. Novità: vedi CHANGELOG.md. Licenza EUPL 1.2; codice sorgente incluso nella cartella sorgenti dell'archivio."
