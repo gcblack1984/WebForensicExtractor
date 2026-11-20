@@ -37,7 +37,6 @@ Requisiti: Windows 10 o 11 a 64 bit, connessione a internet, circa 1 GB di spazi
 |---|---|
 | [Guida operativa e valore legale](docs/Guida_Web_Forensic_Extractor.docx) | Uso del programma, pacchetto di acquisizione, verifica dell'integrità, quadro normativo |
 | [Esempio di verbale](docs/Esempio_Verbale.docx) | Verbale generato da un'acquisizione di prova |
-| [Pubblicazione sul Microsoft Store](docs/Guida_Pubblicazione_Microsoft_Store.docx) | Creazione del pacchetto MSIX e invio a Partner Center |
 | [Informativa sulla privacy](docs/privacy.html) | Dati trattati dal programma e servizi esterni contattati |
 
 ## Compilare dal codice sorgente
@@ -48,7 +47,7 @@ Servono Windows 10/11 a 64 bit, [Python](https://www.python.org/) 3.10 o success
 | Script | Risultato |
 |---|---|
 | `build_windows.bat` | Versione portabile in `dist\WebForensicExtractor\` |
-| `build_store.bat` | Pacchetto MSIX per il Microsoft Store in `dist_store\` (serve anche il Windows SDK; vedi la guida dedicata) |
+| `build_store.bat` | Pacchetto MSIX per il Microsoft Store in `dist_store\` (serve anche il Windows SDK) |
 | `prova_store.bat` | Installa o rimuove il pacchetto MSIX di prova (richiede la Modalità sviluppatore) |
 
 Gli script creano un ambiente virtuale, installano le dipendenze (Playwright con Chromium,
